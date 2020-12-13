@@ -1,4 +1,5 @@
 import time
+import os
 from datetime import datetime
 
 from flask import Flask, render_template
@@ -39,4 +40,5 @@ def demo():
     return render_template('demo.html', **kwds)
 
 if __name__ == '__main__':
-    app.run(threaded=True, host='0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
