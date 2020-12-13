@@ -155,5 +155,8 @@ class PortfolioOptimizer(object):
         results_weights = {'labels': list(x.keys()), 'data': [np.round(v * 100, 2) for v in x.values()]}
 
         asset = self.get_asset_shares(x, test)
-        return results_weights, asset.resample('W').mean().reset_index()
+        asset = asset.resample('W').mean().reset_index()
+        asset ={'time': list(map(lambda x: pd.to_datetime(x).strftime('“%Y-%m-%d”'), asset.time.values.ravel())),
+                'data': (100*asset.close.values.ravel()).tolist()}
+        return results_weights, asset
 

@@ -19,7 +19,7 @@ var myPieChart = new Chart(ctx, {
        {% endfor %}],
       hoverBackgroundColor: [{% for item in palette_hover %}
         "{{item}}",
-       {% endfor %}],,
+       {% endfor %}],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },
