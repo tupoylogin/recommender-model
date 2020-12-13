@@ -221,12 +221,132 @@
 
     <!-- Page level plugins -->
     <script src="static/vendor/chart.js/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
+
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-    <script src="js/demo/chart-bar-demo.js"></script>
+<!--    <script src="static/js/demo/chart-area-demo.js"></script>-->
+<!--    <script src="static/js/demo/chart-pie-demo.js"></script>-->
+<!--    <script src="static/js/demo/chart-bar-demo.js"></script>-->
+    <script>
 
+
+
+        var myPieChart = new Chart(document.getElementById("myPieChart"), {
+          type: 'pie',
+          data: {
+            labels: {{pie_labels|tojson}},
+            datasets: [{
+              data: {{pie_data | tojson}},
+              backgroundColor: pattern.generate({{ palette|tojson }}),
+              hoverBackgroundColor: pattern.generate({{ palette_hover|tojson}}),
+              hoverBorderColor: "rgba(234, 236, 244, 1)"
+            }],
+          },
+          options: {
+            maintainAspectRatio: false,
+            tooltips: {
+              backgroundColor: "rgb(255,255,255)",
+              bodyFontColor: "#858796",
+              borderColor: '#dddfeb',
+              borderWidth: 1,
+              xPadding: 15,
+              yPadding: 15,
+              displayColors: false,
+              caretPadding: 10,
+            },
+            legend: {
+              display: false
+            },
+            cutoutPercentage: 0,
+          },
+        });
+
+
+
+        var myBarChart = new Chart(document.getElementById("myBarChart"), {
+          type: 'bar',
+          data: {
+            datasets: [
+                {
+                  label: "Revenue",
+                  backgroundColor: pattern.draw('square', '#4e73df'),
+                  hoverBackgroundColor: pattern.draw("circle", '#2e59d9'),
+                  borderColor: "#4e73df",
+                  data: {{ bar_data|tojson }},
+                }
+            ],
+          },
+          options: {
+            maintainAspectRatio: false,
+            layout: {
+              padding: {
+                left: 10,
+                right: 25,
+                top: 25,
+                bottom: 0
+              }
+            },
+            scales: {
+              xAxes: [{
+                  type:'time',
+                time: {
+                  unit: 'month',
+                    parser: "YYYY-MM-DD"
+                },
+                gridLines: {
+                  display: false,
+                  drawBorder: false
+                },
+                ticks: {
+                  maxTicksLimit: 6
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  maxTicksLimit: 5,
+                  padding: 10,
+                  // Include a dollar sign in the ticks
+                  callback: function(value, index, values) {
+                    return '$' + value;
+                  }
+                },
+                gridLines: {
+                  color: "rgb(234, 236, 244)",
+                  zeroLineColor: "rgb(234, 236, 244)",
+                  drawBorder: false,
+                  borderDash: [2],
+                  zeroLineBorderDash: [2]
+                }
+              }],
+            },
+            legend: {
+              display: false
+            },
+            tooltips: {
+              titleMarginBottom: 10,
+              titleFontColor: '#6e707e',
+              titleFontSize: 14,
+              backgroundColor: "rgb(255,255,255)",
+              bodyFontColor: "#858796",
+              borderColor: '#dddfeb',
+              borderWidth: 1,
+              xPadding: 15,
+              yPadding: 15,
+              displayColors: false,
+              caretPadding: 10,
+              callbacks: {
+                label: function(tooltipItem, chart) {
+                  var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                  return datasetLabel + ': $' + tooltipItem.yLabel;
+                }
+              }
+            },
+          }
+        });
+    </script>
 </body>
 
 </html>
